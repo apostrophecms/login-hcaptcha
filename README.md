@@ -20,6 +20,13 @@
 
 This login verification module adds a [hCaptcha](https://hcaptcha.com) check when any user logs into the site.
 
+## TODO:
+
+- fix content type security error
+- fix sitekey error
+- make it work on login form
+- make it work on other forms? (pass hcaptcha options to @apostrophecms/form/index.js?)
+
 ## Installation
 
 To install the module, use the command line to run this command in an Apostrophe project's root directory:
@@ -49,7 +56,9 @@ The other requirement is to add your [hCaptcha public API site key](https://docs
 module.exports = {
   options: {
     hcaptcha: {
-      siteKey: 'ADD YOUR SITE KEY'
+      site: 'ADD YOUR SITE KEY',
+      secret: 'ADD YOUR SECRET KEY'
+    }
     }
   }
 };
@@ -79,4 +88,4 @@ module.exports = {
 };
 ```
 
-**If your content security policy is configured some other way**, add `www.google.com` to the `frame-src` directive and  `www.google.com www.gstatic.com` to the `script-src` directive.
+**If your content security policy is configured some other way**, add `hcaptcha.com  *.hcaptcha.com` to the `script-src`, `frame-src`, `style-src` and `connect-src` directives.

@@ -59,7 +59,6 @@ module.exports = {
       site: 'ADD YOUR SITE KEY',
       secret: 'ADD YOUR SECRET KEY'
     }
-    }
   }
 };
 ```

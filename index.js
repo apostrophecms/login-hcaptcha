@@ -1,7 +1,6 @@
 module.exports = {
   improve: '@apostrophecms/login',
   requirements(self) {
-
     if (!self.options.hcaptcha || !self.options.hcaptcha.site || !self.options.hcaptcha.secret) {
       throw new Error('The login hCaptcha site key, secret key, or both are not configured');
     }
@@ -12,11 +11,10 @@ module.exports = {
           phase: 'beforeSubmit',
           async props(req) {
             return {
-              sitekey: self.options.recaptcha.site
+              sitekey: self.options.hcaptcha.site
             };
           },
           async verify(req, data) {
-            console.log('data', data);
             if (!data) {
               throw self.apos.error('invalid', req.t('AposHcaptcha:missingConfig'));
             }
@@ -45,9 +43,9 @@ module.exports = {
           if (!response.success) {
             throw self.apos.error('invalid', req.t('AposHcaptcha:invalidToken'));
           }
-        } catch (e) {
-          self.apos.util.error(e);
-          throw self.apos.error('error', req.t('AposHcaptcha:recaptchaErr'));
+        } catch (error) {
+          self.apos.util.error(error);
+          throw self.apos.error('error', req.t('AposHcaptcha:captchaErr'));
         }
       }
     };

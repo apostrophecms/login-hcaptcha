@@ -10,7 +10,11 @@
 export default {
   emits: [ 'done', 'block' ],
   props: {
-    sitekey: String
+    sitekey: String,
+    url: {
+      type: String,
+      default: 'https://js.hcaptcha.com/1/api.js'
+    }
   },
   data() {
     return {
@@ -37,7 +41,7 @@ export default {
     addScript() {
       let scriptElem = document.createElement('script');
 
-      scriptElem.setAttribute('src', 'https://js.hcaptcha.com/1/api.js');
+      scriptElem.setAttribute('src', this.url);
       scriptElem.setAttribute('async', true);
       scriptElem.setAttribute('defer', true);
 
@@ -49,6 +53,7 @@ export default {
         return;
       }
 
+      // TODO careful with this & arrow function
       hcaptcha
         .execute(this.sitekey, { action: 'submit' })
         .then(token => {

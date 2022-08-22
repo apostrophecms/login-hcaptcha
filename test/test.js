@@ -3,11 +3,11 @@ const testUtil = require('apostrophe/test-lib/test');
 
 const getSiteConfig = function () {
   return {
-    // TODO remove comment?
     // hCaptcha test keys
     // https://docs.hcaptcha.com/#integration-testing-test-keys
     site: '10000000-ffff-ffff-ffff-000000000001',
-    secret: '0x0000000000000000000000000000000000000000'
+    secret: '0x0000000000000000000000000000000000000000',
+    response: '10000000-aaaa-bbbb-cccc-000000000001'
   };
 };
 
@@ -68,7 +68,7 @@ describe('Forms module', function () {
   });
 
   // Improving
-  it.only('should improve the login module', function () {
+  it('should improve the login module', function () {
     const login = apos.modules['@apostrophecms/login'];
 
     const actual = login.options.testOption;
@@ -77,7 +77,7 @@ describe('Forms module', function () {
     assert.equal(actual, expected);
   });
 
-  it.only('should be able to insert test user', async function() {
+  it('should be able to insert test user', async function () {
     const mary = getUserConfig();
 
     const user = apos.user.newInstance();
@@ -95,15 +95,15 @@ describe('Forms module', function () {
     assert.equal(actual, expected);
   });
 
-  it('should not be able to login a user without meeting the beforeSubmit requirement', function() {
+  it('should not be able to login a user without meeting the beforeSubmit requirement', async function () {
     const jar = apos.http.jar();
     const siteConfig = getSiteConfig();
     const mary = getUserConfig();
 
     const actual = async function () {
       // establish session
-      let page = await apos.http.get('/', { jar });
-      // assert.ok(page.match(/logged out/), 'page contains logged out in body');
+      const page = await apos.http.get('/', { jar });
+      assert.ok(page.match(/logged out/), 'page contains logged out in body');
 
       const context = await apos.http.post(
         '/api/v1/@apostrophecms/login/context',
@@ -114,7 +114,7 @@ describe('Forms module', function () {
         }
       );
 
-      // assert.equal(context.requirementProps.AposHcaptcha.sitekey, siteConfig.site);
+      assert.equal(context.requirementProps.AposHcaptcha.sitekey, siteConfig.site);
 
       await apos.http.post(
         '/api/v1/@apostrophecms/login/login',
@@ -128,25 +128,30 @@ describe('Forms module', function () {
           jar
         }
       );
-
-      // Make sure it really didn't work
-      page = await apos.http.get('/', { jar });
-      // assert.ok(page.match(/logged out/), 'page contains logged out in body');
-      console.log(siteConfig, page, context);
     };
     const expected = {
+      name: 'Error',
+      message: 'HTTP error 400',
       status: 400,
-      message: 'The hCaptcha token was missing while verifying login.',
-      data: {
-        requirement: 'AposHcaptcha'
+      body: {
+        message: 'The hCaptcha token was missing while verifying login.',
+        name: 'invalid',
+        data: {
+          requirement: 'AposHcaptcha'
+        }
       }
     };
 
-    assert.rejects(actual, expected);
+    await assert.rejects(actual, expected);
+
+    // Make sure it really didn't work
+    const page = await apos.http.get('/', { jar });
+    assert.ok(page.match(/logged out/), 'page contains logged out in body');
   });
 
-  it.only('should log in with a hcaptcha token', async function() {
+  it('should log in with a hcaptcha token', async function () {
     const mary = getUserConfig();
+    const siteConfig = getSiteConfig();
 
     const jar = apos.http.jar();
 
@@ -163,8 +168,7 @@ describe('Forms module', function () {
           password: mary.pw,
           session: true,
           requirements: {
-            // The hCaptcha test keys accept any token value.
-            AposHcaptcha: 'valid-token'
+            AposHcaptcha: siteConfig.response
           }
         },
         jar

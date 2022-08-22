@@ -2,6 +2,9 @@
   <div
     class="h-captcha"
     :data-sitekey="sitekey"
+    @data-callback="verify"
+    @data-expired-callback="expire"
+    @data-error-callback="error"
   >
   </div>
 </template>
@@ -13,7 +16,7 @@ export default {
     sitekey: String,
     url: {
       type: String,
-      default: 'https://js.hcaptcha.com/1/api.js'
+      default: 'https://js.hcaptcha.com/1/api.js?render=explicit'
     }
   },
   data() {
@@ -30,6 +33,7 @@ export default {
   },
   watch: {
     token(newVal) {
+      console.log('watch', newVal, this.token);
       if (newVal) {
         this.$emit('done', this.token);
       } else {
@@ -40,12 +44,20 @@ export default {
   methods: {
     addScript() {
       let scriptElem = document.createElement('script');
-
       scriptElem.setAttribute('src', this.url);
       scriptElem.setAttribute('async', true);
       scriptElem.setAttribute('defer', true);
 
       document.head.appendChild(scriptElem);
+    },
+    verify(...args) {
+      console.log('verify', args);
+    },
+    expire(...args) {
+      console.log('expire', args);
+    },
+    error(...args) {
+      console.log('error', args);
     },
     executeHcaptcha() {
       if (!window.hcaptcha) {
@@ -54,14 +66,22 @@ export default {
       }
 
       // TODO careful with this & arrow function
+      // console.log('!!', this.sitekey, hcaptcha, window.hcaptcha);
+      // hcaptcha.execute();
+      // hcaptcha.$on('verify', (token, eKey) => {
+      //   console.log('Verified', {token, eKey});
+      // });
       hcaptcha
-        .execute(this.sitekey, { action: 'submit' })
-        .then(token => {
-          this.token = token;
-        });
+        .execute();
+        // .execute(undefined, { async: 'true' })
+        // .then(token => {
+        //   console.log('@@', token, this.token);
+        //   this.token = token;
+        // });
     }
   }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

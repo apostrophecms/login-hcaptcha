@@ -36,9 +36,14 @@ module.exports = {
 
         try {
           const url = 'https://hcaptcha.com/siteverify';
-          const hcaptchaUri = `${url}?secret=${secret}&response=${token}`;
+          const options = {
+            body: `response=${token}&secret=${secret}`,
+            headers: {
+              'Content-Type': 'application/x-www-form-urlencoded'
+            }
+          };
 
-          const response = await self.apos.http.post(hcaptchaUri);
+          const response = await self.apos.http.post(url, options);
 
           if (!response.success) {
             throw self.apos.error('invalid', req.t('AposHcaptcha:invalidToken'));

@@ -23,9 +23,6 @@ This login verification module adds a [hCaptcha](https://hcaptcha.com) check whe
 ## TODO:
 
 - fix content type security error
-- fix sitekey error
-- make it work on login form
-- make it work on other forms? (pass hcaptcha options to @apostrophecms/form/index.js?)
 
 ## Installation
 

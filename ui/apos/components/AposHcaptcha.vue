@@ -2,9 +2,6 @@
   <div
     class="h-captcha"
     :data-sitekey="sitekey"
-    @data-callback="verify"
-    @data-expired-callback="expire"
-    @data-error-callback="error"
   >
   </div>
 </template>
@@ -21,10 +18,11 @@ export default {
   },
   data() {
     return {
-      token: null
+      token: null,
+      hcaptcha: null
     };
   },
-  mounted(){
+  mounted() {
     if (!window.hcaptcha) {
       this.addScript();
     }
@@ -33,7 +31,6 @@ export default {
   },
   watch: {
     token(newVal) {
-      console.log('watch', newVal, this.token);
       if (newVal) {
         this.$emit('done', this.token);
       } else {
@@ -50,14 +47,11 @@ export default {
 
       document.head.appendChild(scriptElem);
     },
-    verify(...args) {
-      console.log('verify', args);
+    verify(token) {
+      this.token = token;
     },
-    expire(...args) {
-      console.log('expire', args);
-    },
-    error(...args) {
-      console.log('error', args);
+    reset() {
+      this.token = null;
     },
     executeHcaptcha() {
       if (!window.hcaptcha) {
@@ -65,19 +59,17 @@ export default {
         return;
       }
 
-      // TODO careful with this & arrow function
-      // console.log('!!', this.sitekey, hcaptcha, window.hcaptcha);
-      // hcaptcha.execute();
-      // hcaptcha.$on('verify', (token, eKey) => {
-      //   console.log('Verified', {token, eKey});
-      // });
-      hcaptcha
-        .execute();
-        // .execute(undefined, { async: 'true' })
-        // .then(token => {
-        //   console.log('@@', token, this.token);
-        //   this.token = token;
-        // });
+      this.hcaptcha = window.hcaptcha;
+
+      const options = {
+        sitekey: this.sitekey,
+        callback: this.verify,
+        'expired-callback': this.reset,
+        'error-callback': this.reset
+      };
+      const widgetId = this.hcaptcha.render(this.$el, options);
+
+      this.hcaptcha.execute(widgetId);
     }
   }
 };

@@ -44,7 +44,6 @@ module.exports = {
           };
 
           const response = await self.apos.http.post(url, options);
-
           if (!response.success) {
             throw self.apos.error('invalid', req.t('AposHcaptcha:invalidToken'));
           }

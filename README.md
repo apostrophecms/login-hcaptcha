@@ -85,3 +85,5 @@ module.exports = {
 ```
 
 **If your content security policy is configured some other way**, add `hcaptcha.com  *.hcaptcha.com` to the `script-src`, `frame-src`, `style-src` and `connect-src` directives.
+
+Please refer to the list at https://docs.hcaptcha.com/#content-security-policy-settings for any additional settings.

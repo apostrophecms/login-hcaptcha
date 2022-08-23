@@ -1,7 +1,7 @@
 {
   "name": "@apostrophecms/login-hcaptcha",
   "version": "1.0.0",
-  "description": " Adds hCaptcha to Apostrophe login pages",
+  "description": "Adds hCaptcha to Apostrophe login pages",
   "main": "index.js",
   "scripts": {
     "lint": "npm run eslint",

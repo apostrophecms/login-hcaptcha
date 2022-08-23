@@ -20,10 +20,6 @@
 
 This login verification module adds a [hCaptcha](https://hcaptcha.com) check when any user logs into the site.
 
-## TODO:
-
-- fix content type security error
-
 ## Installation
 
 To install the module, use the command line to run this command in an Apostrophe project's root directory:

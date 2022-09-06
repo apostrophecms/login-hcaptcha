@@ -10,14 +10,19 @@
 export default {
   emits: [ 'done', 'block' ],
   props: {
-    sitekey: String
+    sitekey: String,
+    url: {
+      type: String,
+      default: 'https://js.hcaptcha.com/1/api.js?render=explicit'
+    }
   },
   data() {
     return {
-      token: null
+      token: null,
+      hcaptcha: null
     };
   },
-  mounted(){
+  mounted() {
     if (!window.hcaptcha) {
       this.addScript();
     }
@@ -36,12 +41,17 @@ export default {
   methods: {
     addScript() {
       let scriptElem = document.createElement('script');
-
-      scriptElem.setAttribute('src', 'https://js.hcaptcha.com/1/api.js');
+      scriptElem.setAttribute('src', this.url);
       scriptElem.setAttribute('async', true);
       scriptElem.setAttribute('defer', true);
 
       document.head.appendChild(scriptElem);
+    },
+    verify(token) {
+      this.token = token;
+    },
+    reset() {
+      this.token = null;
     },
     executeHcaptcha() {
       if (!window.hcaptcha) {
@@ -49,14 +59,21 @@ export default {
         return;
       }
 
-      hcaptcha
-        .execute(this.sitekey, { action: 'submit' })
-        .then(token => {
-          this.token = token;
-        });
+      this.hcaptcha = window.hcaptcha;
+
+      const options = {
+        sitekey: this.sitekey,
+        callback: this.verify,
+        'expired-callback': this.reset,
+        'error-callback': this.reset
+      };
+      const widgetId = this.hcaptcha.render(this.$el, options);
+
+      this.hcaptcha.execute(widgetId);
     }
   }
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+</style>

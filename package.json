@@ -1,7 +1,7 @@
 {
   "name": "@apostrophecms/login-hcaptcha",
   "version": "1.0.0",
-  "description": " Adds hCaptcha to Apostrophe login pages",
+  "description": "Adds hCaptcha to Apostrophe login pages",
   "main": "index.js",
   "scripts": {
     "lint": "npm run eslint",
@@ -12,6 +12,11 @@
     "type": "git",
     "url": "git+https://github.com/apostrophecms/login-hcaptcha.git"
   },
+  "keywords": [
+    "apostrophecms",
+    "captcha",
+    "hcaptcha"
+  ],
   "homepage": "https://github.com/apostrophecms/login-hcaptcha#readme",
   "author": "Apostrophe Technologies",
   "license": "MIT",

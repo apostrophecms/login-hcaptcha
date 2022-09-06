@@ -6,26 +6,19 @@
     <a aria-label="Apostrophe logo" href="https://v3.docs.apostrophecms.org">
       <img src="https://img.shields.io/badge/MADE%20FOR%20Apostrophe%203-000000.svg?style=for-the-badge&logo=Apostrophe&labelColor=6516dd">
     </a>
-    <a aria-label="Test status" href="https://github.com/apostrophecms/login-recaptcha/actions">
-      <img alt="GitHub Workflow Status (branch)" src="https://img.shields.io/github/workflow/status/apostrophecms/login-recaptcha/Tests/main?label=Tests&labelColor=000000&style=for-the-badge">
+    <a aria-label="Test status" href="https://github.com/apostrophecms/login-hcaptcha/actions">
+      <img alt="GitHub Workflow Status (branch)" src="https://img.shields.io/github/workflow/status/apostrophecms/login-hcaptcha/Tests/main?label=Tests&labelColor=000000&style=for-the-badge">
     </a>
     <a aria-label="Join the community on Discord" href="http://chat.apostrophecms.org">
       <img alt="" src="https://img.shields.io/discord/517772094482677790?color=5865f2&label=Join%20the%20Discord&logo=discord&logoColor=fff&labelColor=000&style=for-the-badge&logoWidth=20">
     </a>
-    <a aria-label="License" href="https://github.com/apostrophecms/login-recaptcha/blob/main/LICENSE.md">
+    <a aria-label="License" href="https://github.com/apostrophecms/login-hcaptcha/blob/main/LICENSE.md">
       <img alt="" src="https://img.shields.io/static/v1?style=for-the-badge&labelColor=000000&label=License&message=MIT&color=3DA639">
     </a>
   </p>
 </div>
 
 This login verification module adds a [hCaptcha](https://hcaptcha.com) check when any user logs into the site.
-
-## TODO:
-
-- fix content type security error
-- fix sitekey error
-- make it work on login form
-- make it work on other forms? (pass hcaptcha options to @apostrophecms/form/index.js?)
 
 ## Installation
 
@@ -59,7 +52,6 @@ module.exports = {
       site: 'ADD YOUR SITE KEY',
       secret: 'ADD YOUR SECRET KEY'
     }
-    }
   }
 };
 ```
@@ -89,3 +81,5 @@ module.exports = {
 ```
 
 **If your content security policy is configured some other way**, add `hcaptcha.com  *.hcaptcha.com` to the `script-src`, `frame-src`, `style-src` and `connect-src` directives.
+
+Please refer to the list at https://docs.hcaptcha.com/#content-security-policy-settings for any additional settings.

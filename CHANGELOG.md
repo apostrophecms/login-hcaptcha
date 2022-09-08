@@ -4,4 +4,4 @@
 
 ### Adds
 
-- Init repository
+- Initial release

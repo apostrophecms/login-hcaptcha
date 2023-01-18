@@ -67,9 +67,7 @@ export default {
         'expired-callback': this.reset,
         'error-callback': this.reset
       };
-      const widgetId = this.hcaptcha.render(this.$el, options);
-
-      this.hcaptcha.execute(widgetId);
+      this.hcaptcha.render(this.$el, options);
     }
   }
 };

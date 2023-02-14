@@ -1,5 +1,9 @@
 # Changelog
 
+## UNRELEASED
+
+- Remove `apostrophe` as a peer dependency.
+
 ## 1.1.0
 
 ### Fixes

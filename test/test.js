@@ -50,7 +50,7 @@ const getUserConfig = function () {
   };
 };
 
-describe('Forms module', function () {
+describe('hCaptcha module', function () {
   let apos;
 
   this.timeout(25000);

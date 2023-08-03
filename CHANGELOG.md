@@ -1,5 +1,11 @@
 # Changelog
 
+## UNRELEASED
+
+### Adds
+
+- Add `hcaptcha-complete` and `hcaptcha-invalid-token` structured logging events.
+
 ## 1.1.1 - 2023-02-17
 
 - Remove `apostrophe` as a peer dependency.

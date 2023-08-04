@@ -184,7 +184,6 @@ describe('hCaptcha module', function () {
     // the fancy way to detect `req`
     assert.equal(typeof savedArgs[0].t, 'function');
     assert.equal(savedArgs[1], 'hcaptcha-complete');
-    assert(savedArgs[1].ip);
 
     page = await apos.http.get('/', { jar });
     assert.ok(page.match(/logged in/), 'page contains logged in in body');
@@ -225,10 +224,10 @@ describe('hCaptcha module', function () {
       //
     }
 
-    assert.equal(savedArgs[0], 'hcaptcha-invalid-token');
-    assert(savedArgs[1].ip);
-    delete savedArgs[1].ip;
-    assert.deepEqual(savedArgs[1], {
+    // the fancy way to detect `req`
+    assert.equal(typeof savedArgs[0].t, 'function');
+    assert.equal(savedArgs[1], 'hcaptcha-invalid-token');
+    assert.deepEqual(savedArgs[2], {
       data: {
         success: false,
         'error-codes': [ 'invalid-input-response' ]

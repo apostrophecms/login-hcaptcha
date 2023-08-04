@@ -181,7 +181,9 @@ describe('hCaptcha module', function () {
       }
     );
 
-    assert.equal(savedArgs[0], 'hcaptcha-complete');
+    // the fancy way to detect `req`
+    assert.equal(typeof savedArgs[0].t, 'function');
+    assert.equal(savedArgs[1], 'hcaptcha-complete');
     assert(savedArgs[1].ip);
 
     page = await apos.http.get('/', { jar });

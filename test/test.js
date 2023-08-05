@@ -50,7 +50,7 @@ const getUserConfig = function () {
   };
 };
 
-describe('Forms module', function () {
+describe('hCaptcha module', function () {
   let apos;
 
   this.timeout(25000);
@@ -159,6 +159,12 @@ describe('Forms module', function () {
     let page = await apos.http.get('/', { jar });
     assert.ok(page.match(/logged out/), 'page contains logged out in body');
 
+    // intecept the logger
+    let savedArgs = [];
+    apos.login.logInfo = (...args) => {
+      savedArgs = args;
+    };
+
     await apos.http.post(
       '/api/v1/@apostrophecms/login/login',
       {
@@ -175,7 +181,57 @@ describe('Forms module', function () {
       }
     );
 
+    // the fancy way to detect `req`
+    assert.equal(typeof savedArgs[0].t, 'function');
+    assert.equal(savedArgs[1], 'hcaptcha-complete');
+
     page = await apos.http.get('/', { jar });
     assert.ok(page.match(/logged in/), 'page contains logged in in body');
+  });
+
+  it('should log bad token request', async function () {
+    const mary = getUserConfig();
+
+    const jar = apos.http.jar();
+
+    // establish session
+    const page = await apos.http.get('/', { jar });
+    assert.ok(page.match(/logged out/), 'page contains logged out in body');
+
+    // intecept the logger
+    let savedArgs = [];
+    apos.login.logInfo = (...args) => {
+      savedArgs = args;
+    };
+
+    try {
+      await apos.http.post(
+        '/api/v1/@apostrophecms/login/login',
+        {
+          method: 'POST',
+          body: {
+            username: mary.username,
+            password: mary.pw,
+            session: true,
+            requirements: {
+              AposHcaptcha: 'bad-token'
+            }
+          },
+          jar
+        }
+      );
+    } catch (error) {
+      //
+    }
+
+    // the fancy way to detect `req`
+    assert.equal(typeof savedArgs[0].t, 'function');
+    assert.equal(savedArgs[1], 'hcaptcha-invalid-token');
+    assert.deepEqual(savedArgs[2], {
+      data: {
+        success: false,
+        'error-codes': [ 'invalid-input-response' ]
+      }
+    });
   });
 });

@@ -45,10 +45,14 @@ module.exports = {
 
           const response = await self.apos.http.post(url, options);
           if (!response.success) {
+            self.logInfo(req, 'hcaptcha-invalid-token', {
+              data: response
+            });
             throw self.apos.error('invalid', req.t('AposHcaptcha:invalidToken'));
           }
+          self.logInfo(req, 'hcaptcha-complete');
         } catch (error) {
-          self.apos.util.error(error);
+          self.apos.util.error('hCaptcha error', error);
           throw self.apos.error('error', req.t('AposHcaptcha:captchaErr'));
         }
       }

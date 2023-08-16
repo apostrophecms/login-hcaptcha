@@ -162,7 +162,11 @@ describe('hCaptcha module', function () {
     // intecept the logger
     let savedArgs = [];
     apos.login.logInfo = (...args) => {
-      savedArgs = args;
+      // Don't get confused by unrelated events from the login module,
+      // capture the one we care about
+      if (args[1] === 'hcaptcha-complete') {
+        savedArgs = args;
+      }
     };
 
     await apos.http.post(

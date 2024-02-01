@@ -50,7 +50,7 @@ const getUserConfig = function () {
   };
 };
 
-describe('hCaptcha module', function () {
+describe('@apostrophecms/login-hcaptcha', function () {
   let apos;
 
   this.timeout(25000);
